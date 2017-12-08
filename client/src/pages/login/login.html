@@ -1,0 +1,32 @@
+<!--
+  Generated template for the LoginPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>login</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-label>Username</ion-label>
+  <ion-item>
+    <ion-input type="text" [(ngModel)]="username" name="username"></ion-input>
+  </ion-item>
+
+  <ion-label>Password</ion-label>
+  <ion-item>
+    <ion-input type="password" [(ngModel)]="hashed_password" name="password"></ion-input>
+  </ion-item>
+
+  <div class="buttonTrainer">
+    <button ion-button color="primary" (click)="loginOnClick()">Login as a Pokemon Trainer!</button>
+  </div>
+
+</ion-content>
