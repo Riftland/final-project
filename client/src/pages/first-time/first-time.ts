@@ -19,8 +19,10 @@ export class FirstTimePage {
 
   gender:string
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams
+    ) { }
 
   ionViewDidLoad() {}
 

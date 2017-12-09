@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AuthProvider } from '../../providers/auth/auth';
 
 /**
  * Generated class for the ChoosePokemonPage page.
@@ -17,11 +18,18 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ChoosePokemonPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+  pokeInit:Array<number> = [1, 4, 7];
+
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public auth: AuthProvider) { }
 
   ionViewDidLoad() {}
 
-  
+  surprise() {
+    console.log(this.auth.local);
+    console.log(this.pokeInit[~~(Math.random() * 3)]);
+  }
 
 }

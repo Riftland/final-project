@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Rx';
+import { Storage } from '@ionic/storage';
 
 const BASE = 'http://localhost:3000';
 const URL = `${BASE}/auth`;
@@ -12,6 +13,7 @@ const URL = `${BASE}/auth`;
 export class AuthProvider {
 
   token:any;
+  local:any;
 
   options:object = {
     withCredentials:true
@@ -19,14 +21,28 @@ export class AuthProvider {
 
   tokenUser(o) {
     this.token = o;
+    this.local.set('user', 'Fran');
+    // if(!this.storage.get('user')){
+    //   console.log('No existe user!, vamos a añadirlo!');
+    //   this.addToStorage();
+    // }
     return this.token;
+  }
+
+  addToStorage() {
+    let t = setInterval(() => {
+      console.log('Esperando Token para guardar en storage');
+      if(this.token){
+        this.storage.set('user', this.token);
+      }
+    }, 500);
   }
 
   constructor(
     //public http: HttpClient,
     public http: Http
   ) {
-    console.log('Hello AuthProvider Provider');
+    this.local = new Storage();
   }
 
   //Funciona

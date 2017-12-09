@@ -4,6 +4,7 @@ mongoose.connect('mongodb://localhost/pokefight');
 
 const pokemon = [
   {
+    pokeId: 1,
     name: 'Bulbasaur',
     imgUrlFront: 'https://vignette.wikia.nocookie.net/es.pokemon/images/7/79/Bulbasaur_NB.png/revision/latest?cb=20100919165947',
     imgUrlBack: 'https://vignette.wikia.nocookie.net/es.pokemon/images/b/ba/Bulbasaur_espalda_G5.png/revision/latest?cb=20100921023627',
@@ -37,6 +38,7 @@ const pokemon = [
     price: 0
   },
   {
+    pokeId: 4,
     name: 'Charmander',
     imgUrlFront: 'https://vignette.wikia.nocookie.net/es.pokemon/images/c/ca/Charmander_NB.png/revision/latest?cb=20100919170001',
     imgUrlBack: 'https://vignette.wikia.nocookie.net/es.pokemon/images/3/33/Charmander_espalda_G5.png/revision/latest?cb=20100921024835',
@@ -70,6 +72,7 @@ const pokemon = [
     price: 0
   },
   {
+    pokeId: 7,
     name: 'Squirtle',
     imgUrlFront: 'https://vignette.wikia.nocookie.net/es.pokemon/images/d/d8/Squirtle_NB.png/revision/latest?cb=20100919170015',
     imgUrlBack: 'https://vignette.wikia.nocookie.net/es.pokemon/images/a/aa/Squirtle_espalda_G5.png/revision/latest?cb=20100921024842',

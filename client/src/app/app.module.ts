@@ -3,6 +3,7 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { IonicStorageModule } from '@ionic/storage';
 /*
 Es necesario importar el módulo http y requerirlo en
 imports para poder utilizarlo en los providers/services
@@ -13,6 +14,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { AuthProvider } from '../providers/auth/auth';
 import { TokenReaderProvider } from '../providers/token-reader/token-reader';
+import { PokemonFinderProvider } from '../providers/pokemon-finder/pokemon-finder';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import { TokenReaderProvider } from '../providers/token-reader/token-reader';
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -35,6 +38,7 @@ import { TokenReaderProvider } from '../providers/token-reader/token-reader';
     AuthProvider,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     TokenReaderProvider,
+    PokemonFinderProvider,
   ]
 })
 export class AppModule {}

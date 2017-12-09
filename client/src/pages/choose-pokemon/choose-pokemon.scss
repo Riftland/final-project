@@ -1,6 +1,12 @@
 
 .buttonPokeball {
-  height: 50px;
-  width: 50px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
+  background: url('https://vignette.wikia.nocookie.net/pokemontowerdefensetwo/images/4/4c/Pokeball.png/revision/latest?cb=20131006042433');
+}
+
+.container {
+  margin-top: 200px;
+  text-align: center;
 }
