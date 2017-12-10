@@ -18,6 +18,7 @@ import { AuthProvider } from '../../providers/auth/auth';
 })
 export class ChoosePokemonPage {
 
+  poke:number;
   pokeInit:Array<number> = [1, 4, 7];
 
   constructor(
@@ -28,8 +29,8 @@ export class ChoosePokemonPage {
   ionViewDidLoad() {}
 
   surprise() {
-    console.log(this.auth.local);
-    console.log(this.pokeInit[~~(Math.random() * 3)]);
+    this.poke = this.pokeInit[~~(Math.random() * 3)]
+    this.navCtrl.setRoot('first-pokemon-page', {data: this.poke});
   }
 
 }

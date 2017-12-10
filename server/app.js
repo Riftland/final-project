@@ -7,6 +7,7 @@ const cors = require('cors');
 const jsonwebtoken = require('jsonwebtoken');
 
 const auth = require('./routes/auth');
+const poke = require('./routes/poke');
 
 mongoose.connect('mongodb://localhost/pokefight', {
   useMongoclient: true
@@ -50,6 +51,7 @@ app.use(function(req,res,next){
 })
 
 app.use('/auth', auth);
+app.use('/find', poke);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

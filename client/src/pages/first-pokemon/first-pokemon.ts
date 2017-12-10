@@ -8,18 +8,22 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
+@IonicPage({
+  name: 'first-pokemon-page'
+})
 @Component({
   selector: 'page-first-pokemon',
   templateUrl: 'first-pokemon.html',
 })
 export class FirstPokemonPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams
+  ) { }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad FirstPokemonPage');
+    console.log(this.navParams.get('data'));
   }
 
 }

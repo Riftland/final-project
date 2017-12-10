@@ -4,10 +4,7 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Rx';
-import { Storage } from '@ionic/storage';
-
-const BASE = 'http://localhost:3000';
-const URL = `${BASE}/auth`;
+import { NativeStorage } from '@ionic-native/native-storage';
 
 @Injectable()
 export class AuthProvider {
@@ -15,35 +12,37 @@ export class AuthProvider {
   token:any;
   local:any;
 
+  BASE_URL = 'http://localhost:3000/auth';
+
   options:object = {
     withCredentials:true
   }
 
   tokenUser(o) {
     this.token = o;
-    this.local.set('user', 'Fran');
-    // if(!this.storage.get('user')){
-    //   console.log('No existe user!, vamos a añadirlo!');
-    //   this.addToStorage();
-    // }
+    this.addToStorage();
     return this.token;
   }
 
   addToStorage() {
     let t = setInterval(() => {
-      console.log('Esperando Token para guardar en storage');
+      console.log('Esperando al token para guardar en storage');
       if(this.token){
-        this.storage.set('user', this.token);
+        this.nativeStorage.setItem('tokenUser', {property: this.token._body})
+          .then(
+            () => console.log('Item guardado!'),
+            error => console.log('Error al guardar', error)
+          );
+        clearInterval(t);
       }
     }, 500);
   }
 
   constructor(
     //public http: HttpClient,
-    public http: Http
-  ) {
-    this.local = new Storage();
-  }
+    public http: Http,
+    public nativeStorage: NativeStorage
+  ) { }
 
   //Funciona
   // signup(username:string, hashed_password:string) {
@@ -62,14 +61,14 @@ export class AuthProvider {
   signup(username:string, hashed_password:string) {
     console.log('Método signup del provider');
     console.log(username, hashed_password);
-    return this.http.post(`${URL}/signup`, {username, hashed_password}, this.options)
+    return this.http.post(`${this.BASE_URL}/signup`, {username, hashed_password}, this.options)
       .subscribe(res => res.json());
   }
 
   //Funciona
   login(username:string, hashed_password: string) {
     console.log('Método login del provider');
-    return this.http.post(`${URL}/login`, {username, hashed_password}, this.options)
+    return this.http.post(`${this.BASE_URL}/login`, {username, hashed_password}, this.options)
       .subscribe(token => this.tokenUser(token))
   }
 

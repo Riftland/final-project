@@ -3,7 +3,7 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-import { IonicStorageModule } from '@ionic/storage';
+import { NativeStorage } from '@ionic-native/native-storage';
 /*
 Es necesario importar el módulo http y requerirlo en
 imports para poder utilizarlo en los providers/services
@@ -24,8 +24,7 @@ import { PokemonFinderProvider } from '../providers/pokemon-finder/pokemon-finde
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -39,6 +38,7 @@ import { PokemonFinderProvider } from '../providers/pokemon-finder/pokemon-finde
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     TokenReaderProvider,
     PokemonFinderProvider,
+    NativeStorage
   ]
 })
 export class AppModule {}

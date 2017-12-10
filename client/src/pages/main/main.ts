@@ -31,10 +31,10 @@ export class MainPage {
   ionViewDidLoad() {
     if(!this.auth.token){
       console.log('No hay token');
-      this.waitForToken();
+      //this.waitForToken();
     } else{
       console.log('Sí hay token');
-      this.user = this.tokenReader.loginTokenReader(this.auth.token._body);
+      //this.user = this.tokenReader.loginTokenReader(this.auth.token._body);
       console.log(this.user);
     }
   }

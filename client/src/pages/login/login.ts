@@ -36,11 +36,9 @@ export class LoginPage {
 
   loginOnClick() {
     this.auth.login(this.username, this.hashed_password);
-    //Cambiar a la página principal una vez autenticado
-    //this.navCtrl.push('main-page');
     let t = setInterval(() => {
       if(this.auth.token){
-        this.user = this.tokenReader.loginTokenReader(this.auth.token._body);
+        this.user = this.tokenReader.tokenReader(this.auth.token._body);
         if(this.user.first){
           console.log('A la primera página!');
           //Set root vacía la pila de pages, así que no hace falta el push

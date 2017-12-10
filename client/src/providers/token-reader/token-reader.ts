@@ -10,15 +10,16 @@ import {JwtHelper} from "angular2-jwt";
 @Injectable()
 export class TokenReaderProvider {
 
-  user:string;
+  tokenDeco:string;
   recToken:string;
   jwtHelper = new JwtHelper();
 
   constructor() { }
 
-  loginTokenReader(token){
+  tokenReader(token){
     this.recToken = JSON.parse(token).token;
-    return this.user = this.jwtHelper.decodeToken(this.recToken);
+    return this.tokenDeco = this.jwtHelper.decodeToken(this.recToken);
   }
+
 
 }

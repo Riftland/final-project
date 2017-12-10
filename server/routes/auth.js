@@ -9,7 +9,6 @@ const User = require('../models/User.model');
 router.post('/signup', (req, res, next) => {
   let hashPass = bcrypt.hashSync(req.body.hashed_password, 10);
   let name = req.body.username;
-
   const newUser = new User({
     username: name,
     hashed_password: hashPass
@@ -30,7 +29,7 @@ router.post('/login', (req,res,next) => {
       if(!userFinded.comparePassword(req.body.hashed_password)){
         res.status(401).json({message:'Auth failed'});
       } else{
-        return res.json({token: jwt.sign({ name:userFinded.username, id:userFinded._id, first:userFinded.first_time }, 'RESTFULAPIs')});
+        return res.json({token: jwt.sign({ name:userFinded.username, id:userFinded._id, first:userFinded.first_time }, 'RESTFULLAPIs')});
       }
     })
     .catch(error => {
