@@ -19,6 +19,10 @@ const UserSchema = new Schema ({
     ref: 'Item'
   }],
   coins: {type: Number, default: 500},
+  location: {
+    type: [Number],
+    index: '2d'
+  },
   created: {type: Date, default: Date.now}
 });
 

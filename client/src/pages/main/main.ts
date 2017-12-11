@@ -40,21 +40,9 @@ export class MainPage {
     } else{
       console.log('Sí hay token');
       //this.user = this.tokenReader.loginTokenReader(this.auth.token._body);
-      //Llamar a native storage de auth
+      //No puede leer la propiedad undefined de id
       this.getData();
-      this.geolocator.getPosition();
     }
-  }
-
-  waitForToken() {
-    let t = setInterval(() => {
-      if(this.auth.token){
-        this.navCtrl.setRoot('main-page');
-        console.log(this.user);
-        console.log('Cargando token!')
-        clearInterval(t);
-      }
-    }, 500);
   }
 
   getData() {
@@ -68,6 +56,7 @@ export class MainPage {
             console.log(data);
             this.userData = data
           })
+        this.geolocator.getPosition(this.user.id);
       })
       .catch(error => {
         console.log('No ha sido posible recuperar la info del storage');
