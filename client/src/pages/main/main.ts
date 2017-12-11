@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { TokenReaderProvider } from '../../providers/token-reader/token-reader';
 import { PokemonFinderProvider } from '../../providers/pokemon-finder/pokemon-finder';
+import { GeolocatorProvider } from '../../providers/geolocator/geolocator';
 
 /**
  * Generated class for the MainPage page.
@@ -28,8 +29,9 @@ export class MainPage {
     public navParams: NavParams,
     private auth: AuthProvider,
     private tokenReader: TokenReaderProvider,
-    private pokeFinder: PokemonFinderProvider) {
-  }
+    private pokeFinder: PokemonFinderProvider,
+    public geolocator: GeolocatorProvider
+    ) { }
 
   ionViewDidLoad() {
     if(!this.auth.token){
@@ -40,6 +42,7 @@ export class MainPage {
       //this.user = this.tokenReader.loginTokenReader(this.auth.token._body);
       //Llamar a native storage de auth
       this.getData();
+      this.geolocator.getPosition();
     }
   }
 

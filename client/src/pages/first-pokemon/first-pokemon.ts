@@ -59,6 +59,7 @@ export class FirstPokemonPage {
           this.user.first = false;
           console.log(this.user);
           this.finder.pokeRegister(this.user.id, this.pokemon._id, this.pokeName);
+          //Primer problema
           this.navCtrl.setRoot('main-page');
         })
         .catch(error => {
