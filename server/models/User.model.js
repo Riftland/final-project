@@ -11,11 +11,14 @@ const UserSchema = new Schema ({
     type: Schema.Types.ObjectId,
     ref: 'Pokemon'
   }],
+  pokeNames: [
+    {type: String}
+  ],
   bag: [{
     type: Schema.Types.ObjectId,
     ref: 'Item'
   }],
-  coins: {type: Number, default: 0},
+  coins: {type: Number, default: 500},
   created: {type: Date, default: Date.now}
 });
 

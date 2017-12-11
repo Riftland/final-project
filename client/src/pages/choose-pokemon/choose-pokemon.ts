@@ -23,8 +23,8 @@ export class ChoosePokemonPage {
 
   constructor(
     public navCtrl: NavController,
-    public navParams: NavParams,
-    public auth: AuthProvider) { }
+    public navParams: NavParams
+  ) { }
 
   ionViewDidLoad() {}
 

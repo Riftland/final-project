@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { TokenReaderProvider } from '../../providers/token-reader/token-reader';
+import { PokemonFinderProvider } from '../../providers/pokemon-finder/pokemon-finder';
 
 /**
  * Generated class for the MainPage page.
@@ -19,13 +20,15 @@ import { TokenReaderProvider } from '../../providers/token-reader/token-reader';
 })
 export class MainPage {
 
-  private user:string;
+  private user:any;
+  private userData:any;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private auth: AuthProvider,
-    private tokenReader: TokenReaderProvider) {
+    private tokenReader: TokenReaderProvider,
+    private pokeFinder: PokemonFinderProvider) {
   }
 
   ionViewDidLoad() {
@@ -35,7 +38,8 @@ export class MainPage {
     } else{
       console.log('Sí hay token');
       //this.user = this.tokenReader.loginTokenReader(this.auth.token._body);
-      console.log(this.user);
+      //Llamar a native storage de auth
+      this.getData();
     }
   }
 
@@ -48,6 +52,23 @@ export class MainPage {
         clearInterval(t);
       }
     }, 500);
+  }
+
+  getData() {
+    this.auth.nativeStorage.getItem('tokenUser')
+      .then(data => {
+        console.log(data.property);
+        this.user = this.tokenReader.tokenReader(data.property);
+        console.log(this.user);
+        this.pokeFinder.getAll(this.user.id)
+          .subscribe(data => {
+            console.log(data);
+            this.userData = data
+          })
+      })
+      .catch(error => {
+        console.log('No ha sido posible recuperar la info del storage');
+      })
   }
 
 }

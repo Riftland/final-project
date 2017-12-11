@@ -14,5 +14,13 @@
 
 
 <ion-content padding>
-
+  <div class="pokemonContainer" *ngIf="pokemon">
+    <div class="pokemon"><img src="{{pokemon.front}}"></div>
+    <ion-label>{{pokemon.name}}</ion-label>
+    <ion-item>
+      <ion-label>Give a name!</ion-label>
+      <ion-input [(ngModel)]="pokeName"></ion-input>
+    </ion-item>
+    <button ion-button color="primary" (click)="toMain()">Finish!</button>
+  </div>
 </ion-content>

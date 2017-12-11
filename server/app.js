@@ -8,6 +8,7 @@ const jsonwebtoken = require('jsonwebtoken');
 
 const auth = require('./routes/auth');
 const poke = require('./routes/poke');
+const user = require('./routes/user');
 
 mongoose.connect('mongodb://localhost/pokefight', {
   useMongoclient: true
@@ -32,26 +33,27 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function(req,res,next){
-  //Comprobación del cabecero
-  //Comprobación de la propiedad 'autorización' del cabecero
-  //Comprobación de que pasando dicha propiedad a array, el elemento 0 sea = 'JWT'
-  if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT'){
-    jsonwebtoken.verify( req.headers.authorization.split(' ')[1],'RESTFULLAPIs', function(err,decode){
-      if(err) req.user = undefined;
-      console.log("Success in decodified");
-      req.user = decode;
-      next();
-    });
-  }else{
-    console.log("Failure");
-    req.user = undefined;
-    next();
-  }
-})
+// app.use(function(req,res,next){
+//   //Comprobación del cabecero
+//   //Comprobación de la propiedad 'autorización' del cabecero
+//   //Comprobación de que pasando dicha propiedad a array, el elemento 0 sea = 'JWT'
+//   if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'JWT'){
+//     jsonwebtoken.verify( req.headers.authorization.split(' ')[1],'RESTFULLAPIs', function(err,decode){
+//       if(err) req.user = undefined;
+//       console.log("Success in decodified");
+//       req.user = decode;
+//       next();
+//     });
+//   }else{
+//     console.log("Failure");
+//     req.user = undefined;
+//     next();
+//   }
+// })
 
 app.use('/auth', auth);
 app.use('/find', poke);
+app.use('/user', user);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -27,7 +27,6 @@ export class FirstTimePage {
   ionViewDidLoad() {}
 
   choosePokemon() {
-    console.log('Elige a tu bicho, cabrón!');
     this.navCtrl.push('choose-pokemon-page');
   }
 

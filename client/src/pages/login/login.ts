@@ -45,6 +45,7 @@ export class LoginPage {
           this.navCtrl.setRoot('first-time-page');
         } else{
           console.log('A la página principal del jugador!');
+          this.navCtrl.setRoot('main-page');
         }
         clearInterval(t);
       }

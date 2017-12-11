@@ -3,12 +3,14 @@ const router = express.Router();
 
 const jwt = require('jsonwebtoken');
 const Pokemon = require('../models/Pokemon.model');
+const User = require('../models/User.model');
 
 //Ruta para poke finder
-router.post('/:id', (req,res,next) => {
+router.get('/:id', (req,res,next) => {
   Pokemon.findOne({'pokeId':req.params.id})
     .then(pokeFinded => {
       return res.json({token: jwt.sign({
+        _id: pokeFinded._id,
         id: pokeFinded.pokeId,
         name: pokeFinded.name,
         front: pokeFinded.imgUrlFront,
@@ -23,5 +25,17 @@ router.post('/:id', (req,res,next) => {
 });
 
 //Ruta para añadir pokemon al equipo
+router.post('/add/:id', (req,res,next) => {
+  console.log('================' + req.params.id);
+  console.log('================' + req.body.id + ' | ' + req.body.pokeName);
+  User.update({'_id':req.params.id},
+    {$push: {team: req.body.id, pokeNames: req.body.pokeName}, first_time: false})
+      .then(() => {
+        res.status(200).json({message: 'Registration succeded'});
+      })
+      .catch(error => {
+        res.status(402).json({message: 'Problems during registration'});
+      })
+});
 
 module.exports = router;
