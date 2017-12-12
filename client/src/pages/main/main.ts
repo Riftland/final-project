@@ -41,7 +41,9 @@ export class MainPage {
       console.log('Sí hay token');
       //this.user = this.tokenReader.loginTokenReader(this.auth.token._body);
       //No puede leer la propiedad undefined de id
-      this.getData();
+      if(this.auth.nativeStorage.getItem('tokenUser')){
+        this.getData();
+      }
     }
   }
 

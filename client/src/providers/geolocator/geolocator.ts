@@ -22,6 +22,9 @@ export class GeolocatorProvider {
     withCredentials:true
   }
 
+  rival:object;
+  fight:boolean = true;
+
   constructor(
     //public http: HttpClient,
     public http: Http,
@@ -29,24 +32,26 @@ export class GeolocatorProvider {
   ) { }
 
   getPosition(userId:number) {
-    setInterval(() => {
-      this.geo.getCurrentPosition()
-        .then(resp => {
-          //console.log('ID: ' + userId);
-          this.coordinates.push(resp.coords.longitude);
-          this.coordinates.push(resp.coords.latitude);
-          //console.log(this.coordinates);
-          //console.log(`Latitud: ${resp.coords.latitude} | Longitud: ${resp.coords.longitude}`);
-          this.http.post(`${this.BASE_URL_LOC}/${userId}`, this.coordinates, this.options)
-            .subscribe(res => {
-              console.log(res.json());
-              this.coordinates = [];
-            })
-        })
-        .catch(error => {
-          console.log('Error intentando adquirir la geolocalización', error);
-        })
-    }, 2000)
+    if(this.fight){
+      let t = setInterval(() => {
+        this.geo.getCurrentPosition()
+          .then(resp => {
+            //console.log('ID: ' + userId);
+            this.coordinates = [Number(resp.coords.latitude.toFixed(6)), Number(resp.coords.longitude.toFixed(6))];
+            //console.log(this.coordinates);
+            //console.log(`Latitud: ${resp.coords.longitude} | Longitud: ${resp.coords.latitude}`);
+            this.http.post(`${this.BASE_URL_LOC}/${userId}`, this.coordinates, this.options)
+              .subscribe(res => {
+                this.rival = res
+                this.fight = false;
+                clearInterval(t);
+              })
+          })
+          .catch(error => {
+            console.log('Error intentando adquirir la geolocalización', error);
+          })
+      }, 2000)
+    }
   }
 
 }

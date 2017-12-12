@@ -21,7 +21,7 @@ const UserSchema = new Schema ({
   coins: {type: Number, default: 500},
   location: {
     type: [Number],
-    index: '2d'
+    index: '2dsphere'
   },
   created: {type: Date, default: Date.now}
 });
