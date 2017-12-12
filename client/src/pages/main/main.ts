@@ -4,6 +4,8 @@ import { AuthProvider } from '../../providers/auth/auth';
 import { TokenReaderProvider } from '../../providers/token-reader/token-reader';
 import { PokemonFinderProvider } from '../../providers/pokemon-finder/pokemon-finder';
 import { GeolocatorProvider } from '../../providers/geolocator/geolocator';
+import { AlertController } from 'ionic-angular';
+
 
 /**
  * Generated class for the MainPage page.
@@ -27,6 +29,7 @@ export class MainPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    public alerCtrl: AlertController,
     private auth: AuthProvider,
     private tokenReader: TokenReaderProvider,
     private pokeFinder: PokemonFinderProvider,
@@ -43,6 +46,7 @@ export class MainPage {
       //No puede leer la propiedad undefined de id
       if(this.auth.nativeStorage.getItem('tokenUser')){
         this.getData();
+        this.watcher();
       }
     }
   }
@@ -61,5 +65,20 @@ export class MainPage {
         console.log('No ha sido posible recuperar la info del storage');
       })
   }
+
+  watcher(){
+    setInterval(() => {
+      if(this.geolocator.show) {
+        let alert = this.alerCtrl.create({
+          title: 'New Rival!',
+          message: 'Misterious rival has appeared!',
+          buttons: ['See result!']
+        });
+        this.geolocator.show = false;
+        alert.present();
+      }
+    }, 1000)
+  }
+
 
 }

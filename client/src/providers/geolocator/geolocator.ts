@@ -24,6 +24,7 @@ export class GeolocatorProvider {
 
   rival:object;
   fight:boolean = true;
+  show:boolean = false;
 
   constructor(
     //public http: HttpClient,
@@ -44,6 +45,7 @@ export class GeolocatorProvider {
               .subscribe(res => {
                 this.rival = res
                 this.fight = false;
+                this.show = true;
                 clearInterval(t);
               })
           })

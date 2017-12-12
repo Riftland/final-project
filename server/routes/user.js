@@ -37,7 +37,11 @@ router.post('/loc/:id', (req,res,next) => {
               validRivals = users.filter(e => {
                 return e._id + '' !== userFinded._id;
               })
-              console.log('Rival encontrado!');
+              //Repasar por qué repite la id que no debería
+              console.log('================');
+              console.log(userFinded._id);
+              console.log(validRivals);
+              console.log('================');
               const rival = {
                     name: validRivals[id].username,
                     pokeNames: validRivals[id].pokeNames,
