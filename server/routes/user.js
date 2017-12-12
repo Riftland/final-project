@@ -31,21 +31,26 @@ router.post('/loc/:id', (req,res,next) => {
         })
         .populate('team')
         .then(users => {
-          users.forEach(e => {
-            if(e._id + '' !== userFinded._id + ''){
+            if(users.length > 1){
+              let validRivals;
+              let id = ~~(Math.random() * (users.length - 1)) + 1;
+              validRivals = users.filter(e => {
+                return e._id + '' !== userFinded._id;
+              })
               console.log('Rival encontrado!');
               const rival = {
-                    name: e.username,
-                    pokeNames: e.pokeNames,
-                    team: e.team,
-                    gender: e.gender
+                    name: validRivals[id].username,
+                    pokeNames: validRivals[id].pokeNames,
+                    team: validRivals[id].team,
+                    gender: validRivals[id].gender
                   }
               //Pendiente, queda calcular la media de stats de
               //los pokemon del contrincante para hayar al rival más igualado
               console.log(rival);
               return res.status(200).json(rival);
-            }
-          })
+          } else{
+            res.status(401).json({messsage: 'No hay rival'});
+          }
         })
         .catch(error => {
           console.log(error);

@@ -50,12 +50,9 @@ export class MainPage {
   getData() {
     this.auth.nativeStorage.getItem('tokenUser')
       .then(data => {
-        console.log(data.property);
         this.user = this.tokenReader.tokenReader(data.property);
-        console.log(this.user);
         this.pokeFinder.getAll(this.user.id)
           .subscribe(data => {
-            console.log(data);
             this.userData = data
           })
         this.geolocator.getPosition(this.user.id);
