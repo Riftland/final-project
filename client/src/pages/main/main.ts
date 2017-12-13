@@ -67,12 +67,18 @@ export class MainPage {
   }
 
   watcher(){
+    //No está bien implementado
     setInterval(() => {
       if(this.geolocator.show) {
         let alert = this.alerCtrl.create({
           title: 'New Rival!',
           message: 'Misterious rival has appeared!',
-          buttons: ['See result!']
+          buttons: [{
+            text: 'See result!',
+            handler: () => {
+              this.navCtrl.push('fight-log-page');
+            }
+          }]
         });
         this.geolocator.show = false;
         alert.present();

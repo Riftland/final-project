@@ -6,6 +6,7 @@ const pokemon = [
   {
     pokeId: 1,
     name: 'Bulbasaur',
+    type: ['Grass', 'Poison'],
     imgUrlFront: 'https://vignette.wikia.nocookie.net/es.pokemon/images/7/79/Bulbasaur_NB.png/revision/latest?cb=20100919165947',
     imgUrlBack: 'https://vignette.wikia.nocookie.net/es.pokemon/images/b/ba/Bulbasaur_espalda_G5.png/revision/latest?cb=20100921023627',
     stats: {
@@ -40,6 +41,7 @@ const pokemon = [
   {
     pokeId: 4,
     name: 'Charmander',
+    type: ['Fire'],
     imgUrlFront: 'https://vignette.wikia.nocookie.net/es.pokemon/images/c/ca/Charmander_NB.png/revision/latest?cb=20100919170001',
     imgUrlBack: 'https://vignette.wikia.nocookie.net/es.pokemon/images/3/33/Charmander_espalda_G5.png/revision/latest?cb=20100921024835',
     stats: {
@@ -74,6 +76,7 @@ const pokemon = [
   {
     pokeId: 7,
     name: 'Squirtle',
+    type: ['Water'],
     imgUrlFront: 'https://vignette.wikia.nocookie.net/es.pokemon/images/d/d8/Squirtle_NB.png/revision/latest?cb=20100919170015',
     imgUrlBack: 'https://vignette.wikia.nocookie.net/es.pokemon/images/a/aa/Squirtle_espalda_G5.png/revision/latest?cb=20100921024842',
     stats: {
