@@ -4,9 +4,11 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const Pokemon = require('../models/Pokemon.model');
 const User = require('../models/User.model');
+const Log = require('../models/Log.model');
 
 /*
-Modelo para la construcción de peleas
+---------------------------------------
+Modelo para la construcción de peleas (Primera generación)
 ---------------------------------------
 */
 const pokeTypes = [
@@ -117,6 +119,10 @@ const pokeTypes = [
   }
 ]
 
+/*
+- Función generadora del multiplicador en función del tipo del atacante y el tipo del defensor
+@Params: attackType -> tipo del ataque | typeRival -> tipo del defensor
+*/
 function getMultiplier(attackType, typeRival){
   let multiplier = 1;
   for(i = 0; i < pokeTypes.length; i++){
@@ -136,11 +142,12 @@ function getMultiplier(attackType, typeRival){
       }
     }
   }
-  console.log('ATACANTE: ' + attackType);
-  console.log('DEFENSOR: ' + typeRival);
   return multiplier;
 }
 
+/*
+- Función para obtener aleatoriamente qué ataque se llevará a cabo en función de la posición
+*/
 function getAttack(){
   let att;
   let n = ~~(Math.random() * 100);
@@ -156,12 +163,21 @@ function getAttack(){
     return att;
   }
 
-
+/*
+- Función encargada de realizar la batalla, sin importar el tamaño del equipo de cada jugador
+@Params: user -> objeto usuario activo | rival -> objeto usuario elegido al
+  azar entre todos los que se encontraban cerca del usuario
+*/
 function fight(user, rival) {
+  //Igualar no importa, van a cambiarse las propiedades de ambas variables
+  //Por eso luego me encuentro que la propiedad team está vacía en el front
   let userTeam = user.team;
   let rivalTeam = rival.team;
   let userPokenames = user.pokeNames;
   let rivalPokenames = rival.pokeNames;
+
+  let logArray = [];
+  let result, winner, looser;
 
   let totalDmg, att, turn, multiplier, finalAttack;
 
@@ -189,7 +205,7 @@ function fight(user, rival) {
         }
         rivalTeam[0].stats.health = rivalTeam[0].stats.health - totalDmg;
         //Aquí el push y console
-        msg = `${userPokenames[0]} hizo ${att.name} que causó ${totalDmg} de daño a ${rivalPokenames[0]} - HP: ${rivalTeam[0].stats.health}`
+        msg = `${user.username}: ${userPokenames[0]} hizo ${att.name} que causó ${totalDmg} de daño a ${rivalPokenames[0]} - HP: ${rivalTeam[0].stats.health}`
         turn = rivalTeam[0]
 
       } else {
@@ -205,31 +221,70 @@ function fight(user, rival) {
         }
         userTeam[0].stats.health = userTeam[0].stats.health - totalDmg;
         //Aquí el push y console
-        msg = `${rivalPokenames[0]} hizo ${att.name} que causó ${totalDmg} de daño a ${userPokenames[0]} - HP: ${rivalTeam[0].stats.health}`
+        msg = `${rival.username}: ${rivalPokenames[0]} hizo ${att.name} que causó ${totalDmg} de daño a ${userPokenames[0]} - HP: ${rivalTeam[0].stats.health}`
         turn = userTeam[0]
 
       }
 
+      logArray.push(msg);
       console.log(msg + ' | ' + finalAttack + ' | ' + totalDmg);
 
     }
 
     if(userTeam[0].stats.health <= 0){
-      console.log(`Ganador ${rivalPokenames[0]}`);
+      msg = `Ganador ${rivalPokenames[0]}`;
+      winner = rival._id;
+      looser = user._id;
+      console.log('============================');
+      console.log(msg);
+      console.log('============================');
       userTeam.splice(0, 1);
       userPokenames.splice(0, 1);
     }
     if(rivalTeam[0].stats.health <= 0){
-      console.log(`Ganador ${userPokenames[0]}`);
+      msg = `Ganador ${userPokenames[0]}`;
+      winner = user._id;
+      looser = rival._id;
+      console.log('============================');
+      console.log(msg);
+      console.log('============================');
       rivalTeam.splice(0, 1);
-      userPokenames.splice(0, 1);
+      rivalPokenames.splice(0, 1);
     }
+
+    logArray.push(msg);
 
   }
 
+  result = {
+    winner: winner,
+    looser: looser,
+    log: logArray
+  }
+
+  saveData(result);
+
 }
 
-//Ruta para guardar la posición actual del usuario
+/*
+- Función para guardar el log de batalla junto al vencedor y al perdedor
+@Params: result -> objecto con las propiedades de la batalla resuelta
+*/
+function saveData(result) {
+  //Hay que machacar los resultados anteriores
+  Log.create(result, (error, log) => {
+    if(error)throw error;
+    console.log('Log added!');
+    //mongoose.connection.close();
+  })
+
+}
+
+/*
+- Ruta para guardar la posición actual del usuario
+- Además se encarga de elegir un contrincante al azar entre los que se
+  encuentren cerca y de iniciar la función de pelea
+*/
 router.post('/loc/:id', (req,res,next) => {
 
   const minLat = req.body[0] - 0.00005;
@@ -254,7 +309,7 @@ router.post('/loc/:id', (req,res,next) => {
         })
         .populate('team')
         .then(users => {
-            let activeUser;
+            console.log(users);
             if(users.length > 1){
               let validRivals;
               validRivals = users.filter(e => {
@@ -269,8 +324,10 @@ router.post('/loc/:id', (req,res,next) => {
                   }
               //Pendiente, queda calcular la media de stats de
               //los pokemon del contrincante para hayar al rival más igualado
+              console.log(validRivals[id]);
               fight(userFinded, validRivals[id]);
-              return res.status(200).json(rival);
+
+              return res.status(200).json(rival); //La propiedad team estará vacía
           } else{
             res.status(200).json({messsage: 'No hay rival'});
           }
@@ -284,7 +341,7 @@ router.post('/loc/:id', (req,res,next) => {
     })
 });
 
-//Ruta para traer toda la info del usuario
+//Ruta para obtener toda la info del usuario
 router.get('/:id', (req,res,next) => {
   console.log(req.params.id)
   User.findOne({'_id': req.params.id})

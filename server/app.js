@@ -9,6 +9,7 @@ const jsonwebtoken = require('jsonwebtoken');
 const auth = require('./routes/auth');
 const poke = require('./routes/poke');
 const user = require('./routes/user');
+const log = require('./routes/log');
 
 mongoose.connect('mongodb://localhost/pokefight', {
   useMongoclient: true
@@ -50,6 +51,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/auth', auth);
 app.use('/find', poke);
 app.use('/user', user);
+app.use('/log', log);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

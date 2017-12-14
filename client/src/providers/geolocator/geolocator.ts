@@ -22,7 +22,7 @@ export class GeolocatorProvider {
     withCredentials:true
   }
 
-  rival:object;
+  rival:any;
   fight:boolean = true;
   show:boolean = false;
 
@@ -35,6 +35,7 @@ export class GeolocatorProvider {
   getPosition(userId:number) {
     if(this.fight){
       let t = setInterval(() => {
+        let response;
         this.geo.getCurrentPosition()
           .then(resp => {
             //console.log('ID: ' + userId);
@@ -43,10 +44,15 @@ export class GeolocatorProvider {
             //console.log(`Latitud: ${resp.coords.longitude} | Longitud: ${resp.coords.latitude}`);
             this.http.post(`${this.BASE_URL_LOC}/${userId}`, this.coordinates, this.options)
               .subscribe(res => {
-                this.rival = res
-                this.fight = false;
-                this.show = true;
-                clearInterval(t);
+                // response = res.json();
+                // console.log(response.message);
+                // if(res.json().message + '' !== 'No hay rival'){
+                  this.rival = res.json();
+                  console.log(this.rival);
+                  this.fight = false;
+                  this.show = true;
+                  clearInterval(t);
+                // }
               })
           })
           .catch(error => {
