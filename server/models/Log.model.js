@@ -10,7 +10,8 @@ const LogSchema = new Schema ({
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
-  log: [String]
+  log: [String],
+  created: {type: Date, default: Date.now()}
 })
 
 module.exports = mongoose.model('Log', LogSchema);

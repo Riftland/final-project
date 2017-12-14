@@ -36,6 +36,7 @@ export class LoginPage {
 
   loginOnClick() {
     this.auth.login(this.username, this.hashed_password);
+    console.log(this.username, this.hashed_password);
     let t = setInterval(() => {
       if(this.auth.token){
         this.user = this.tokenReader.tokenReader(this.auth.token._body);
@@ -48,6 +49,8 @@ export class LoginPage {
           this.navCtrl.setRoot('main-page');
         }
         clearInterval(t);
+      } else{
+        console.log('No hay token!');
       }
       //Queda cortar si no hay autorización!!
     }, 500);

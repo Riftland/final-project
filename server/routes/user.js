@@ -1,10 +1,22 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 
 const jwt = require('jsonwebtoken');
 const Pokemon = require('../models/Pokemon.model');
 const User = require('../models/User.model');
 const Log = require('../models/Log.model');
+
+/*
+Constantes para la búsqueda por cercanía de rivales;
+*/
+const lat = 0.00005;
+const long = 0.00005;
+
+let msgResp = {
+  location: 'Location updated',
+  fight: false
+}
 
 /*
 ---------------------------------------
@@ -262,7 +274,7 @@ function fight(user, rival) {
     log: logArray
   }
 
-  saveData(result);
+  return result;
 
 }
 
@@ -271,12 +283,24 @@ function fight(user, rival) {
 @Params: result -> objecto con las propiedades de la batalla resuelta
 */
 function saveData(result) {
+
+  console.log(result);
   //Hay que machacar los resultados anteriores
+  //Algo guarro pero temporal
+  // try{
+  //   mongoose.connection.db.dropCollection('logs', (error, log) => {
+  //     if(error)throw error;
+  //     console.log('Log erased');
+  //   });
+  // }catch(error){
+  //   console.log('No data to erase');
+  // }
+
   Log.create(result, (error, log) => {
     if(error)throw error;
     console.log('Log added!');
-    //mongoose.connection.close();
-  })
+    // mongoose.connection.close();
+  });
 
 }
 
@@ -287,59 +311,84 @@ function saveData(result) {
 */
 router.post('/loc/:id', (req,res,next) => {
 
-  const minLat = req.body[0] - 0.00005;
-  const maxLat = req.body[0] + 0.00005;
-  const minLong = req.body[1] - 0.00005;
-  const maxLong = req.body[1] + 0.00005;
-
   const rivalsArray = [];
 
   const newCoords = {
     location: [req.body[0], req.body[1]]
   }
 
-  User.findByIdAndUpdate({'_id': req.params.id}, newCoords)
+  User.findByIdAndUpdate({'_id': req.params.id}, newCoords, {new: true})
     .populate('team')
-    .then(userFinded => {
-      User.find({
-        $and: [
-          {location: {$elemMatch: {$gte: minLat, $lte: maxLat}}},
-          {location: {$elemMatch: {$gte: minLong, $gte: maxLong}}}
-        ]
-        })
-        .populate('team')
-        .then(users => {
-            console.log(users);
-            if(users.length > 1){
-              let validRivals;
-              validRivals = users.filter(e => {
-                return e._id + '' !== userFinded._id + '';
-              })
-              let id = ~~(Math.random() * (users.length - 1));
-              const rival = {
-                    name: validRivals[id].username,
-                    pokeNames: validRivals[id].pokeNames,
-                    team: validRivals[id].team,
-                    gender: validRivals[id].gender
-                  }
-              //Pendiente, queda calcular la media de stats de
-              //los pokemon del contrincante para hayar al rival más igualado
-              console.log(validRivals[id]);
-              fight(userFinded, validRivals[id]);
+    .then(activeUser => {
 
-              return res.status(200).json(rival); //La propiedad team estará vacía
-          } else{
-            res.status(200).json({messsage: 'No hay rival'});
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        })
+      console.log('Coords added!');
+      //Llamada para encontrar rivales
+      findRivals(activeUser, res);
+      return;
     })
     .catch(error => {
       res.status(402).json({message: 'Problems during update location'});
     })
 });
+
+/*
+- Función para encontrar un rival aleatorio entre los más cercanos
+@Params: activeUser -> el objeto del usuario actual para, mediante su localización,
+  encontrar a los rivales más cercanos
+*/
+function findRivals(activeUser, res) {
+
+  let result;
+  let minLat = activeUser.location[0] - 0.0002;
+  let maxLat = activeUser.location[0] + 0.0002;
+  let minLong = activeUser.location[1] - 0.0002;
+  let maxLong = activeUser.location[1] + 0.0002;
+
+  //console.log(activeUser);
+  User.find({
+    $and: [
+      {location: {$elemMatch: {$gte: minLat, $lte: maxLat}}},
+      {location: {$elemMatch: {$gte: minLong, $gte: maxLong}}}
+    ]
+  })
+    .populate('team')
+    .then(users => {
+
+        if(users.length > 1){
+
+          let validRivals = [];
+          validRivals = users.filter(e => {
+            return e._id + '' !== activeUser._id + '';
+          })
+          let id = ~~(Math.random() * (users.length - 1));
+
+          if(validRivals.length > 0){
+            msgResp.fight = true;
+          }
+
+          const rival = {
+                name: validRivals[id].username,
+                pokeNames: validRivals[id].pokeNames,
+                team: validRivals[id].team,
+                gender: validRivals[id].gender
+              }
+          //Pendiente, queda calcular la media de stats de
+          //los pokemon del contrincante para hayar al rival más igualado
+          console.log('================' + validRivals[id]);
+          result = fight(activeUser, validRivals[id]);
+          saveData(result);
+
+          return res.status(200).json(msgResp);
+
+      } else{
+        console.log('No hay rival');
+        return res.status(200).json(msgResp);
+      }
+    })
+    .catch(error => {
+      console.log(error);
+    })
+}
 
 //Ruta para obtener toda la info del usuario
 router.get('/:id', (req,res,next) => {

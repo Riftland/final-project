@@ -69,7 +69,11 @@ export class AuthProvider {
   login(username:string, hashed_password: string) {
     console.log('Método login del provider');
     return this.http.post(`${this.BASE_URL}/login`, {username, hashed_password}, this.options)
-      .subscribe(token => this.tokenUser(token))
+      .subscribe(token => {
+          console.log('Entra aquí');
+          this.tokenUser(token)
+        }
+      )
   }
 
 }
