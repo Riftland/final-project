@@ -330,7 +330,6 @@ function findRivals(activeUser, res) {
   let minLong = activeUser.location[1] - 0.0002;
   let maxLong = activeUser.location[1] + 0.0002;
 
-  //console.log(activeUser);
   User.find({
     $and: [
       {location: {$elemMatch: {$gte: minLat, $lte: maxLat}}},
@@ -358,8 +357,7 @@ function findRivals(activeUser, res) {
                 team: validRivals[id].team,
                 gender: validRivals[id].gender
               }
-          //Pendiente, queda calcular la media de stats de
-          //los pokemon del contrincante para hayar al rival más igualado
+
           result = fight(activeUser, validRivals[id]);
           saveData(result);
 
