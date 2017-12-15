@@ -188,7 +188,7 @@ function fight(user, rival) {
   let userPokenames = user.pokeNames;
   let rivalPokenames = rival.pokeNames;
 
-  let logArray = [];
+  let logArray = [], imgArray = [];
   let result, winner, looser;
 
   let totalDmg, att, turn, multiplier, finalAttack;
@@ -217,7 +217,8 @@ function fight(user, rival) {
         }
         rivalTeam[0].stats.health = rivalTeam[0].stats.health - totalDmg;
         //Aquí el push y console
-        msg = `${user.username}: ${userPokenames[0]} hizo ${att.name} que causó ${totalDmg} de daño a ${rivalPokenames[0]} - HP: ${rivalTeam[0].stats.health}`
+        msg = `${userPokenames[0]}: ${att.name} did ${totalDmg} dmg`;
+        imgArray.push(userTeam[0].imgUrlFront);
         turn = rivalTeam[0]
 
       } else {
@@ -233,7 +234,8 @@ function fight(user, rival) {
         }
         userTeam[0].stats.health = userTeam[0].stats.health - totalDmg;
         //Aquí el push y console
-        msg = `${rival.username}: ${rivalPokenames[0]} hizo ${att.name} que causó ${totalDmg} de daño a ${userPokenames[0]} - HP: ${rivalTeam[0].stats.health}`
+        msg = `${rivalPokenames[0]}: ${att.name} did ${totalDmg} dmg`;
+        imgArray.push(rivalTeam[0].imgUrlFront);
         turn = userTeam[0]
 
       }
@@ -244,22 +246,18 @@ function fight(user, rival) {
     }
 
     if(userTeam[0].stats.health <= 0){
-      msg = `Ganador ${rivalPokenames[0]}`;
+      msg = `Winner: ${rivalPokenames[0]} (${rival.username})`;
       winner = rival._id;
       looser = user._id;
-      console.log('============================');
-      console.log(msg);
-      console.log('============================');
+      imgArray.push(rivalTeam[0].imgUrlFront);
       userTeam.splice(0, 1);
       userPokenames.splice(0, 1);
     }
     if(rivalTeam[0].stats.health <= 0){
-      msg = `Ganador ${userPokenames[0]}`;
+      msg = `Winner ${userPokenames[0]} (${user.username})`;
       winner = user._id;
       looser = rival._id;
-      console.log('============================');
-      console.log(msg);
-      console.log('============================');
+      imgArray.push(userTeam[0].imgUrlFront);
       rivalTeam.splice(0, 1);
       rivalPokenames.splice(0, 1);
     }
@@ -271,7 +269,8 @@ function fight(user, rival) {
   result = {
     winner: winner,
     looser: looser,
-    log: logArray
+    log: logArray,
+    img: imgArray
   }
 
   return result;
@@ -284,22 +283,9 @@ function fight(user, rival) {
 */
 function saveData(result) {
 
-  console.log(result);
-  //Hay que machacar los resultados anteriores
-  //Algo guarro pero temporal
-  // try{
-  //   mongoose.connection.db.dropCollection('logs', (error, log) => {
-  //     if(error)throw error;
-  //     console.log('Log erased');
-  //   });
-  // }catch(error){
-  //   console.log('No data to erase');
-  // }
-
   Log.create(result, (error, log) => {
     if(error)throw error;
     console.log('Log added!');
-    // mongoose.connection.close();
   });
 
 }
@@ -374,7 +360,6 @@ function findRivals(activeUser, res) {
               }
           //Pendiente, queda calcular la media de stats de
           //los pokemon del contrincante para hayar al rival más igualado
-          console.log('================' + validRivals[id]);
           result = fight(activeUser, validRivals[id]);
           saveData(result);
 

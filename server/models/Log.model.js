@@ -11,6 +11,7 @@ const LogSchema = new Schema ({
     ref: 'User'
   },
   log: [String],
+  img: [String],
   created: {type: Date, default: Date.now()}
 })
 

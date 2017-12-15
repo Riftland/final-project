@@ -55,6 +55,7 @@ export class MainPage {
     this.auth.nativeStorage.getItem('tokenUser')
       .then(data => {
         this.user = this.tokenReader.tokenReader(data.property);
+        console.log(this.user);
         this.pokeFinder.getAll(this.user.id)
           .subscribe(data => {
             this.userData = data
@@ -84,6 +85,16 @@ export class MainPage {
         alert.present();
       }
     }, 1000)
+  }
+
+  toLog(){
+    this.navCtrl.push('fight-log-page');
+  }
+
+  team() {
+    this.navCtrl.push('team-page', {
+      param: this.user.team
+    })
   }
 
 

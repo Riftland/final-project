@@ -17,6 +17,7 @@ import { AuthProvider } from '../providers/auth/auth';
 import { TokenReaderProvider } from '../providers/token-reader/token-reader';
 import { PokemonFinderProvider } from '../providers/pokemon-finder/pokemon-finder';
 import { GeolocatorProvider } from '../providers/geolocator/geolocator';
+import { LogFinderProvider } from '../providers/log-finder/log-finder';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { GeolocatorProvider } from '../providers/geolocator/geolocator';
     PokemonFinderProvider,
     NativeStorage,
     GeolocatorProvider,
-    Geolocation
+    Geolocation,
+    LogFinderProvider
   ]
 })
 export class AppModule {}

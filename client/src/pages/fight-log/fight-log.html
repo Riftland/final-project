@@ -15,4 +15,24 @@
 
 <ion-content padding>
 
+<div *ngIf="logFinder.log">
+  <ion-list *ngFor="let e of logFinder.log.log; let i = index">
+
+    <ion-item *ngIf="i % 2 == 0">
+      <ion-thumbnail item-start>
+        <img src="{{logFinder.log.img[i]}}">
+      </ion-thumbnail>
+      <p>{{e}}</p>
+    </ion-item>
+
+    <ion-item *ngIf="i % 2 != 0">
+      <p>{{e}}</p>
+      <ion-thumbnail item-end>
+        <img src="{{logFinder.log.img[i]}}">
+      </ion-thumbnail>
+    </ion-item>
+
+  </ion-list>
+</div>
+
 </ion-content>

@@ -4,13 +4,26 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-header>
 
-  <ion-navbar>
-    <ion-title>Main!</ion-title>
-  </ion-navbar>
+<ion-nav #content></ion-nav>
 
-</ion-header>
+<ion-menu [content]="content">
+  <ion-header>
+    <ion-toolbar>
+      <img src="../../assets/imgs/Poketlogo.png" alt="">
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <ion-list>
+      <button ion-item (click)="toLog()">
+        Battle Log
+      </button>
+      <button ion-item (click)="toSettings()">
+        Settings (Future update)
+      </button>
+    </ion-list>
+  </ion-content>
+</ion-menu>
 
 <div>
   <ion-card *ngIf="geolocator.rival">
@@ -22,17 +35,17 @@
 
   <ion-card>
     <img src="http://www.nintendojo.com/wp-content/uploads/2012/10/masthead_pokemongeneric1.jpg">
-    <div class="card-title">Team</div>
+    <div class="card-title">Team (Future update)</div>
   </ion-card>
 
   <ion-card class="card">
     <img src="https://pokemongohub.net/wp-content/uploads/2016/11/premier_ball_by_baconb0y-d5uft97.jpg">
-    <div class="card-title">Items</div>
+    <div class="card-title">Items (Future update)</div>
   </ion-card>
 
   <ion-card class="card">
     <img src="https://c2.staticflickr.com/4/3531/3188000757_55a9045294_z.jpg?zz=1">
-    <div class="card-title">Shop</div>
+    <div class="card-title">Shop (Future update)</div>
   </ion-card>
 
 </ion-content>
