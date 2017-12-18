@@ -1,6 +1,4 @@
-# final-project
-
-Poket
+#Poket
 
 App developed with Ionic and JWT for the auth.
 
