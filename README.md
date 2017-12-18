@@ -1,4 +1,4 @@
-#Poket
+POKET
 
 App developed with Ionic and JWT for the auth.
 
